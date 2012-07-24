@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "webmock"
   s.add_development_dependency "factory_girl"
   s.add_development_dependency "rack-test"
+  s.add_development_dependency "rake"
   s.add_runtime_dependency "rspec"
   s.add_runtime_dependency "rack"
   s.add_runtime_dependency "httparty"
