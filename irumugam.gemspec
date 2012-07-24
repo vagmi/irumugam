@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Shakir Shakiel", "Vagmi Mudumbai", "Lokesh D"]
   s.email       = ["shakiras@thoughtworks.com", "vagmimud@thoughtworks.com", "lokeshd@thoughtworks.com"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{Describe service contracts that act both as a spec and a mock}
+  s.description = %q{Describe service contracts that act both as a spec and a mock}
 
   s.rubyforge_project = "irumugam"
 
