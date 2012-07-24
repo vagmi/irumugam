@@ -1,5 +1,7 @@
 # Irumugam
 
+[![Build Status](https://secure.travis-ci.org/vagmi/irumugam.png?branch=master)](http://travis-ci.org/vagmi/irumugam)
+
 Irumugam - The two faced framework helps you setup a DSL for describing services. The one face helps you test the services using RSpec while the other runs it as a mock for consuming them.
 
 To include irumugam in your project, add it to your `Gemfile`
