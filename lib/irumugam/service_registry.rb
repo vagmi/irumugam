@@ -15,7 +15,7 @@ module Irumugam
     end
 
     def find(request)
-      paths[request.path].select { |c| request.request_method==c.method && request.params==c.params }.first
+      paths[request.path].select { |c| c.matches?(request) }.first
     end
 
     def paths_for(service_name)

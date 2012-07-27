@@ -1,12 +1,14 @@
 require 'helper/spec_helper'
 describe SpecWriter do
   before do
+    varadha = {name: "Varadha", email: "varadha@thoughtworks.com"}
     stub_request(:get,"http://testservice/glorious_service/users").with(:query=>{}).to_return(:body=>[FactoryGirl.attributes_for(:user)].to_json)
     stub_request(:get,"http://testservice/glorious_service/users/1").with(:query=>{}).to_return(:body=>FactoryGirl.attributes_for(:user).to_json)
     stub_request(:get,"http://testservice/glorious_service/users/1.json").with(:query=>{}).to_return(:body=>FactoryGirl.attributes_for(:user).to_json)
+    stub_request(:post,"http://testservice/glorious_service/users.json").with(:query=>{},:body=>varadha).to_return(:body=>varadha.merge({"id"=>22}).to_json, :status=>201)
     $test_object = dup()
-    $test_object.should_receive(:teardown).exactly(4).times
-    $test_object.should_receive(:setup).exactly(4).times
+    $test_object.should_receive(:teardown).exactly(5).times
+    $test_object.should_receive(:setup).exactly(5).times
     $test_object.should_receive(:setup_once).once
     $test_object.should_receive(:teardown_once).once
 
@@ -47,10 +49,16 @@ describe SpecWriter do
         json({"id" => 42, "name"=>"Some Name", "email"=>"someemail@example.com"}, :ignore=>["id"])
       end
 
+      post "/users.json", :body=>varadha, :type=>:json do
+        status 201
+        json varadha.merge(:id=>42), :ignore=>[:id]
+      end
+
       get "/users/1" do
         status 200
         body ({name: "Some Other Name", email: "email@example.com"}).to_json
       end
+
 
     end
   end
@@ -62,7 +70,7 @@ describe SpecWriter do
       register_with_rspec!
       RSpec.world.example_groups.count.should == 1
       RSpec.world.example_groups.first.run(reporter)
-      formatter.examples.count.should == 4
+      formatter.examples.count.should == 5
       formatter.failed_examples.count.should == 1
     end
   end

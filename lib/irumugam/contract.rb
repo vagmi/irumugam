@@ -1,11 +1,13 @@
 module Irumugam
   class Contract
-    attr_accessor :method, :path, :service, :accept,:block, :contract_status, :contract_body, :test_host, :params, :contract_json, :contract_json_ignore
+    attr_accessor :method, :path, :service, :accept,:block, :contract_status, :contract_body, :test_host, :params, :contract_json, :contract_json_ignore, :request_body, :request_type
     def initialize(options={})
       @method = options[:method]
       @path = options[:path]
       @test_host = options[:test_host]
       @params = options[:params]
+      @request_body = options[:body]
+      @request_type = options[:type]
       @accept = options[:accept]
       @service = options[:service]
       instance_eval &(options[:block])
@@ -35,6 +37,7 @@ module Irumugam
       process_hash(spec_json) if spec_json.is_a?(Hash)
       spec_json
     end
+
 
     private
     def process_hash(hsh)
