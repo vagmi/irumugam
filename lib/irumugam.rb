@@ -1,6 +1,8 @@
 require 'json'
 require 'httparty'
 require 'rack'
+require 'active_support/core_ext/hash/keys'
+
 require "irumugam/version"
 require "irumugam/contract"
 require "irumugam/service"

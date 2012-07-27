@@ -47,4 +47,10 @@ describe Service do
     @service.after_blocks[:each].should_not be_nil
     @service.after_blocks[:all].should_not be_nil
   end
+  it "should accept json in the contract content" do
+    @service.get "/users.json" do
+      status 200
+      json [{:name=>"name"}], :ignore=>[:id]
+    end
+  end
 end

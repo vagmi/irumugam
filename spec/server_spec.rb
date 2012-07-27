@@ -11,7 +11,7 @@ describe Server do
       end_point "/glorious_service"
       get "/users" do
         status 200
-        body [FactoryGirl.attributes_for(:user)].to_json
+        json [FactoryGirl.attributes_for(:user)]
       end
       get "/users/1" do
         status 200
@@ -24,5 +24,10 @@ describe Server do
     get "/glorious_service/users"
     last_response.ok?.should be_true
     last_response.body.should == [FactoryGirl.attributes_for(:user)].to_json
+  end
+  it "should serve a non-json request" do
+    get "/glorious_service/users/1"
+    last_response.ok?.should be_true
+    last_response.body.should == ({name: "Some Other Name", email: "email@example.com"}).to_json
   end
 end
