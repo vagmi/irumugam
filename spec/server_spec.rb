@@ -15,7 +15,7 @@ describe Server do
         status 200
         json [FactoryGirl.attributes_for(:user)]
       end
-      get "/users/1" do
+      get "/users/:id" do
         status 200
         body ({name: "Some Other Name", email: "email@example.com"}).to_json
       end
@@ -23,7 +23,7 @@ describe Server do
         status 201
         json({name: "vagmi", email: "vagmi@thoughtworks.com"}.merge(:id=>23), :ignore=>[:id])
       end
-      post "/users.json", :body=>varadha, :type=>:json do
+      post "/users.json", :body=>{name: "Varadha", email:"varadha@thoughtworks.com"}, :type=>:json do
         status 201
         json(varadha.merge(:id=>23), :ignore=>[:id])
       end

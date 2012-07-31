@@ -15,7 +15,8 @@ module Irumugam
     end
 
     def find(request)
-      paths[request.path].select { |c| c.matches?(request) }.first
+      req_body = request.body.read
+      paths.values.flatten.select { |c| c.matches?(request, req_body) }.first
     end
 
     def paths_for(service_name)

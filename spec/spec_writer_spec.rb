@@ -6,9 +6,10 @@ describe SpecWriter do
     stub_request(:get,"http://testservice/glorious_service/users/1").with(:query=>{}).to_return(:body=>FactoryGirl.attributes_for(:user).to_json)
     stub_request(:get,"http://testservice/glorious_service/users/1.json").with(:query=>{}).to_return(:body=>FactoryGirl.attributes_for(:user).to_json)
     stub_request(:post,"http://testservice/glorious_service/users.json").with(:query=>{},:body=>varadha).to_return(:body=>varadha.merge({"id"=>22}).to_json, :status=>201)
+    stub_request(:put,"http://testservice/glorious_service/users/42.json").with(:query=>{},:body=>varadha).to_return(:body=>varadha.merge({"id"=>42}).to_json, :status=>201)
     $test_object = dup()
-    $test_object.should_receive(:teardown).exactly(5).times
-    $test_object.should_receive(:setup).exactly(5).times
+    $test_object.should_receive(:teardown).exactly(6).times
+    $test_object.should_receive(:setup).exactly(6).times
     $test_object.should_receive(:setup_once).once
     $test_object.should_receive(:teardown_once).once
 
@@ -28,6 +29,7 @@ describe SpecWriter do
 
       before(:each) do
         $test_object.setup
+        @path_object = {:id=>42}
       end
 
       after(:each) do
@@ -54,6 +56,12 @@ describe SpecWriter do
         json varadha.merge(:id=>42), :ignore=>[:id]
       end
 
+      put "/users/:id.json", :body=>varadha, :type=>:json do
+        status 201
+        json varadha.merge(:id=>42), :ignore=>[:id]
+        path_object { @path_object }
+      end
+
       get "/users/1" do
         status 200
         body ({name: "Some Other Name", email: "email@example.com"}).to_json
@@ -70,7 +78,11 @@ describe SpecWriter do
       register_with_rspec!
       RSpec.world.example_groups.count.should == 1
       RSpec.world.example_groups.first.run(reporter)
-      formatter.examples.count.should == 5
+      #formatter.failed_examples.each do |fe|
+        #puts fe.metadata[:description_args]
+        #puts fe.metadata[:execution_result]
+      #end
+      formatter.examples.count.should == 6
       formatter.failed_examples.count.should == 1
     end
   end

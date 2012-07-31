@@ -2,8 +2,13 @@ require 'rspec'
 module Irumugam
 
   module RequestMethods
-    def perform_request
-      options = {}
+    def perform_request(options)
+      path_object = options.delete(:path_object)
+      if(path_object)
+        path_object.each do |k,v|
+          self.path.gsub!(":#{k}",v.to_s)
+        end
+      end
       options[:query]=self.params if self.params
       if self.request_body
         if self.request_type == :json
@@ -31,7 +36,8 @@ module Irumugam
 
           ServiceRegistry.instance.paths_for(service.name).each do |contract|
             it "#{contract.method} #{contract.path} should return with #{contract.contract_status}" do
-              response = contract.perform_request
+              path_object = self.instance_eval(&contract.path_object_block) if contract.path_object_block
+              response = contract.perform_request(:path_object=>path_object)
               response.code.should==contract.contract_status
               contract.prepare_response(response.body).should == contract.json_for_spec if contract.contract_json
               response.body.should == contract.contract_body if contract.contract_body
