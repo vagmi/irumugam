@@ -21,10 +21,11 @@ To you can describe a service this way using irumugam
 
       before(:each) do
         #do setup stuff
+        @test_order = FactoryGirl.create(:order)
       end
 
       after(:each) do
-        #do teardown stuff
+        DatabaseCleaner.clean
       end
 
       get "/orders" do
@@ -34,7 +35,13 @@ To you can describe a service this way using irumugam
 
       get "/orders/1" do
         status 200
-        body ({name: "Some Name", quantity: 500}).to_json
+        json {id:42, name: "Some Name", quantity: 500}, :ignore=>[:id]
+      end
+
+      put "/orders/:id", :body=>{:description=>"asdf"}, :type=>:json do
+        status 200
+        path_object { @test_order.attributes }
+        json {id: 42, description: "asdf", count: 50}, :ignore=>[:id]
       end
     end
 
