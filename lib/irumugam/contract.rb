@@ -58,7 +58,7 @@ module Irumugam
       request_json = JSON.parse(req_body) if (!req_body.empty? && request.content_type=="application/json")
       result = path_match?(request) && 
         request.request_method==self.method && 
-        request.params==self.params && 
+        request.params==self.params.stringify_keys && 
         (request_json.nil? ? true : (request_json == self.request_body.stringify_keys))
       result
     end
